@@ -29,9 +29,9 @@ const IGNORED_ATTRS = [ "autocomplete" ]
 const ATTR_NAME_REGEXP = /([^\t\n\f \/>"'=]+)/
 
 export default class DOMManager extends ListWalker<Message> {
-  private readonly vTexts: Map<number, VText> = new Map() // map vs object here?
-  private readonly vElements: Map<number, VElement> = new Map()
-  private readonly olVRoots: Map<number, OnloadVRoot> = new Map()
+  private vTexts: Map<number, VText> = new Map() // map vs object here?
+  private vElements: Map<number, VElement> = new Map()
+  private olVRoots: Map<number, OnloadVRoot> = new Map()
   /** Constructed StyleSheets https://developer.mozilla.org/en-US/docs/Web/API/Document/adoptedStyleSheets
    * as well as <style> tag owned StyleSheets
    */
@@ -55,6 +55,16 @@ export default class DOMManager extends ListWalker<Message> {
     super()
     this.selectionManager = new SelectionManager(this.vElements, screen)
     this.stylesManager = new StylesManager(screen, setCssLoading)
+  }
+
+  flushAll() {
+    this.clearSelectionManager()
+    this.vTexts = new Map()
+    this.vElements = new Map()
+    this.olVRoots = new Map()
+    this.olStyleSheets = new Map()
+    this.olStyleSheetsDeprecated = new Map()
+    this.stylesManager.reset()
   }
 
   setStringDict(stringDict: Record<number,string>) {

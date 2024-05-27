@@ -1,17 +1,16 @@
 import logger from 'App/logger';
 
 import type Screen from '../Screen/Screen';
-import type { Message, StringDict } from '../messages';
+import type { Message } from '../messages';
 
 import { MType} from '../messages';
 import ListWalker from '../../common/ListWalker';
-import DOMManager from './DOM/DOMManager'; 
-
+import DOMManager from './DOM/DOMManager';
 
 export default class PagesManager extends ListWalker<DOMManager> {
 	private currentPage: DOMManager | null = null
 	/**
-	 * String Dictionary in tracker may be desync with CreateDocument (why???) 
+	 * String Dictionary in tracker may be desync with CreateDocument (why???)
 	 * e.g. some StringDictionary and other messages before any 'CreateDocument' one
 	 * TODO: understand why and fix
 	 */
@@ -63,7 +62,9 @@ export default class PagesManager extends ListWalker<DOMManager> {
 	moveReady(t: number): Promise<void> {
 		const requiredPage = this.moveGetLast(t)
 		if (requiredPage != null) {
-			this.currentPage?.clearSelectionManager()
+			this.currentPage?.reset()
+			this.currentPage?.flushAll()
+			this.currentPage = null
 			this.currentPage = requiredPage
 			this.currentPage.reset() // Otherwise it won't apply create_document
 		}

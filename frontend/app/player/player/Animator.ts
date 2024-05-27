@@ -69,7 +69,7 @@ export default class Animator {
 
   private animationFrameRequestId: number = 0
 
-  constructor(private store: Store<GetState>, private mm: IMessageManager) {
+  constructor(private store: Store<GetState & { cssLoading: boolean }>, private mm: IMessageManager) {
 
     // @ts-ignore
     window.playerJump = this.jump.bind(this)
@@ -110,10 +110,7 @@ export default class Animator {
       if (skipInterval) time = skipInterval.end
 
       if (time < 0) { time = 0 } // ?
-      //const fmt = getFirstMessageTime();
-      //if (time < fmt) time = fmt; // ?
 
-      // if (livePlay && time < endTime) { time = endTime }
       // === live only
       if (livePlay && time < lastMessageTime) { time = lastMessageTime }
       if (endTime < lastMessageTime) {
@@ -194,16 +191,17 @@ export default class Animator {
     }
   }
 
-  // jump by index?
   jump = (time: number) => {
-    if (this.store.get().playing && this.store.get().ready) {
+    const { playing, ready, endTime } = this.store.get()
+
+    if (playing && ready) {
       cancelAnimationFrame(this.animationFrameRequestId)
       this.setTime(time)
       this.startAnimation()
-      this.store.update({ livePlay: time === this.store.get().endTime })
+      this.store.update({ livePlay: time === endTime })
     } else {
       this.setTime(time)
-      this.store.update({ livePlay: time === this.store.get().endTime })
+      this.store.update({ livePlay: time === endTime })
     }
   }
 

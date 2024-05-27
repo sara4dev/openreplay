@@ -233,6 +233,7 @@ export default class MessageManager {
         this.activeTab = this.state.get().currentTab ?? Object.keys(this.tabs)[0];
       }
 
+
       if (tabId) {
         if (this.activeTab !== tabId) {
           this.state.update({ currentTab: tabId });

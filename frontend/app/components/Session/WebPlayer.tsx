@@ -48,8 +48,8 @@ function WebPlayer(props: any) {
   const [noteItem, setNoteItem] = useState<Note | undefined>(undefined);
   const [visuallyAdjusted, setAdjusted] = useState(false);
   const [windowActive, setWindowActive] = useState(!document.hidden);
-  // @ts-ignore
   const [contextValue, setContextValue] =
+  // @ts-ignore
     useState<IPlayerContext>(defaultContextValue);
   const params: { sessionId: string } = useParams();
   const [fullView, setFullView] = useState(false);
