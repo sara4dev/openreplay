@@ -9,6 +9,7 @@ import {forgotPassword, signup} from 'App/routes';
 import LoginBg from '../../svg/login-illustration.svg';
 import {ENTERPRISE_REQUEIRED} from 'App/constants';
 import cn from 'classnames';
+import GoogleLogin from "./GoogleLogin";
 import stl from './login.module.css';
 import Copyright from 'Shared/Copyright';
 import {connect} from 'react-redux';
@@ -98,6 +99,9 @@ const Login: React.FC<LoginProps> = ({errors, loading, authDetails, login, setJw
                   />
                 )}
                 <div style={{width: '350px'}} className="px-8">
+                  <GoogleLogin isLogin />
+                  <div className={'my-4 text-disabled-text w-full text-center'}>Or continue with</div>
+
                   <Form.Field>
                     <label>Email Address</label>
                     <Input
