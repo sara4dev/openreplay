@@ -3,11 +3,19 @@ fromVersion: "v1.18.0"
 postgresql: &postgres
   # For generating passwords
   # `openssl rand -hex 20`
+  persistence:
+    enabled: false
   postgresqlPassword: "{{ randAlphaNum 20}}"
   postgresqlHost: "postgresql.db.svc.cluster.local"
   postgresqlPort: "5432"
   postgresqlUser: "postgres"
   postgresqlDatabase: "postgres"
+  livenessProbe:
+    initialDelaySeconds: 120
+  image:
+    debug: true
+  # volumePermissions:
+  #   enabled: true    
   # resources:
   #   requests:
   #     memory: 256Mi
@@ -60,6 +68,8 @@ redis: &redis
 
 minio:
   # Disable this if you use an external object storage service (s3)
+  livenessProbe:
+    initialDelaySeconds: 120
   enabled: true
   global:
     minio:
@@ -125,7 +135,7 @@ global:
   # In case of multiple nodes in the kubernetes cluster,
   # we'll have to create an RWX PVC for shared components.
   # If it's a single node, we'll use hostVolume, which is the default for the community/oss edition.
-  pvcRWXName: "hostPath"
+  pvcRWXName: "openreplay"
   s3:
     region: "us-east-1"
     endpoint: "http://minio.db.svc.cluster.local:9000"
